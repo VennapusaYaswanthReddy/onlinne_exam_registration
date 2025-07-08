@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AU Exam Registration Portal - Admin</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('https://i.postimg.cc/q7L1DnCK/au2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+    }
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      padding: 3.5rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      max-width: 480px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 1.5rem;
+      width: 250px;
+      border-radius: 0.5rem;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+      transition: transform 0.3s ease;
+    }
+    .logo:hover {
+      transform: scale(1.03);
+    }
+    .main-title {
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: #1e40af;
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      color: #4b5563;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .toast {
+      position: fixed;
+      top: 40px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      color: white;
+      display: none;
+      z-index: 1000;
+      min-width: 200px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeSlideIn 0.5s ease forwards;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .toast-success { background: #10b981; }
+    .toast-error { background: #ef4444; }
+    .toast-close {
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 1rem;
+      color: white;
+      opacity: 0.8;
+    }
+    .toast-close:hover {
+      opacity: 1;
+    }
+    @keyframes fadeSlideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .hidden { display: none; }
+    .form-input {
+      transition: all 0.3s ease;
+    }
+    .form-input:focus {
+      border-color: #1e40af;
+      ring: 2px;
+      ring-color: #1e40af;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #1e40af, #3b82f6);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(to right, #1e3a8a, #2563eb);
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <img src="https://i.postimg.cc/QMrzyh42/AU.png" alt="Alliance University Logo" class="logo">
+    <h1 class="main-title">AU Exam Registration Portal</h1>
+
+    <!-- Admin Login Form -->
+    <div id="login-form">
+      <h2 class="subtitle">Admin Login</h2>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="mb-5">
+          <label for="login-admin-id" class="block text-sm font-medium text-gray-700">Admin ID</label>
+          <input type="text" id="login-admin-id" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="mb-5">
+          <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input type="password" id="login-password" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <button type="submit" class="btn-primary w-full text-white py-3 rounded-lg font-semibold">Login</button>
+        <p class="mt-4 text-center text-sm">
+          <a href="#" class="text-blue-600 hover:underline" onclick="showForm('signup-form')">Sign Up as Admin</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- Admin Signup Form -->
+    <div id="signup-form" class="hidden">
+      <h2 class="subtitle">Admin Sign Up</h2>
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="mb-5">
+          <label for="signup-fullname" class="block text-sm font-medium text-gray-700">Full Name</label>
+          <input type="text" id="signup-fullname" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="mb-5">
+          <label for="signup-admin-id" class="block text-sm font-medium text-gray-700">Admin ID</label>
+          <input type="text" id="signup-admin-id" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="mb-5">
+          <label for="signup-password" class="block text-sm font-medium text-gray-700">Create Password</label>
+          <input type="password" id="signup-password" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="mb-5">
+          <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input type="password" id="signup-confirm-password" class="form-input mt-1 p-3 w-full border rounded-lg focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <button type="submit" class="btn-primary w-full text-white py-3 rounded-lg font-semibold">Sign Up</button>
+        <p class="mt-4 text-center text-sm">
+          <a href="#" class="text-blue-600 hover:underline" onclick="showForm('login-form')">Back to Login</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"><span id="toast-message"></span><span class="toast-close" onclick="closeToast()">✕</span></div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3000';
+
+    function showForm(formId) {
+      document.querySelectorAll('#login-form, #signup-form').forEach(form => {
+        form.classList.add('hidden');
+      });
+      document.getElementById(formId).classList.remove('hidden');
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      toast.className = `toast ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    function closeToast() {
+      const toast = document.getElementById('toast');
+      toast.style.display = 'none';
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const adminId = document.getElementById('login-admin-id').value;
+      const password = document.getElementById('login-password').value;
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ adminId, password })
+        });
+        const data = await response.json();
+        if (data.success) {
+          localStorage.setItem('token', data.data.token);
+          showToast('Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = 'admindashboard.html';
+          }, 2000);
+        } else {
+          showToast(data.message || 'Invalid Admin ID or password', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+
+    async function handleSignup(event) {
+      event.preventDefault();
+      const fullname = document.getElementById('signup-fullname').value;
+      const adminId = document.getElementById('signup-admin-id').value;
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm-password').value;
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ fullname, adminId, password })
+        });
+        const data = await response.json();
+        if (data.success) {
+          showToast('Signup successful! Please login.', 'success');
+          setTimeout(() => {
+            showForm('login-form');
+          }, 2000);
+        } else {
+          showToast(data.message || 'Signup failed', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AU Exam Registration Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Heroicons CDN -->
+  <script src="https://unpkg.com/@heroicons/vue@2.1.1/dist/20/solid.js"></script>
+  <style>
+    body {
+      background-image: url('https://i.postimg.cc/q7L1DnCK/au2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 1.5rem;
+      width: 250px;
+      border-radius: 0.5rem;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+      transition: transform 0.3s ease;
+    }
+    .logo:hover {
+      transform: scale(1.03);
+    }
+    .main-title {
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: #1e40af;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #1e40af, #3b82f6);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(to right, #1e3a8a, #2563eb);
+    }
+    .form-input, .form-select {
+      transition: all 0.3s ease;
+      padding: 0.75rem;
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: #1e40af;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
+    }
+    .toast {
+      position: fixed;
+      top: 40px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      color: white;
+      display: none;
+      z-index: 1000;
+      min-width: 250px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeSlideIn 0.5s ease forwards;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .toast-success { 
+      background: #10b981; 
+      border-left: 4px solid #065f46;
+    }
+    .toast-error { 
+      background: #ef4444; 
+      border-left: 4px solid #991b1b;
+    }
+    .toast-close {
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 1rem;
+      color: white;
+      opacity: 0.8;
+      font-weight: bold;
+    }
+    .toast-close:hover {
+      opacity: 1;
+    }
+    @keyframes fadeSlideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .btn-primary:active {
+      animation: pulse 0.2s ease;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <img src="https://i.postimg.cc/QMrzyh42/AU.png" alt="Alliance University Logo" class="logo">
+      <h1 class="main-title">AU Exam Registration Portal</h1>
+
+      <!-- Login Form -->
+      <div id="login-section">
+        <h2 class="text-lg font-semibold text-center mb-4">Login</h2>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <input type="email" id="login-email" class="form-input" placeholder="Email" required>
+          <input type="password" id="login-password" class="form-input" placeholder="Password" required>
+          <button type="submit" class="btn-primary">Login</button>
+          <p class="text-center mt-4">
+            <a href="#" onclick="showSection('signup-section')" class="text-blue-600 hover:underline">Sign Up</a> |
+            <a href="#" onclick="showSection('forgot-password-section')" class="text-blue-600 hover:underline">Forgot Password?</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signup-section" class="hidden">
+        <h2 class="text-lg font-semibold text-center mb-4">Sign Up</h2>
+        <form id="signup-form" onsubmit="handleSignup(event)">
+          <input type="text" id="signup-name" class="form-input" placeholder="Full Name" required>
+          <input type="email" id="signup-email" class="form-input" placeholder="Email" required>
+          <input type="password" id="signup-password" class="form-input" placeholder="Password" required>
+          <input type="password" id="signup-confirm-password" class="form-input" placeholder="Confirm Password" required>
+          <button type="submit" class="btn-primary">Sign Up</button>
+          <p class="text-center mt-4">
+            <a href="#" onclick="showSection('login-section')" class="text-blue-600 hover:underline">Back to Login</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="forgot-password-section" class="hidden">
+        <h2 class="text-lg font-semibold text-center mb-4">Forgot Password</h2>
+        <form id="forgot-password-form" onsubmit="handleForgotPassword(event)">
+          <input type="email" id="forgot-email" class="form-input" placeholder="Email" required>
+          <button type="submit" class="btn-primary">Send OTP</button>
+          <p class="text-center mt-4">
+            <a href="#" onclick="showSection('login-section')" class="text-blue-600 hover:underline">Back to Login</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- OTP Verification and Password Reset Form -->
+      <div id="otp-verification-section" class="hidden">
+        <h2 class="text-lg font-semibold text-center mb-4">Verify OTP & Reset Password</h2>
+        <form id="otp-verification-form" onsubmit="handleOtpVerification(event)">
+          <input type="text" id="otp-code" class="form-input" placeholder="Enter OTP" required>
+          <input type="password" id="new-password" class="form-input" placeholder="New Password" required>
+          <input type="password" id="confirm-new-password" class="form-input" placeholder="Confirm New Password" required>
+          <button type="submit" class="btn-primary">Verify OTP & Reset Password</button>
+          <p class="text-center mt-4">
+            <a href="#" onclick="showSection('login-section')" class="text-blue-600 hover:underline">Back to Login</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="toast"><span id="toast-message"></span><span class="toast-close" onclick="closeToast()">×</span></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3000';
+
+    function showSection(sectionId) {
+      document.querySelectorAll('#login-section, #signup-section, #forgot-password-section, #otp-verification-section').forEach(section => section.classList.add('hidden'));
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      toast.className = `toast ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    function closeToast() {
+      document.getElementById('toast').style.display = 'none';
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (data.success) {
+          localStorage.setItem('token', data.data.token);
+          showToast(data.message, 'success');
+          setTimeout(() => {
+            window.location.href = data.data.redirect;
+          }, 2000);
+        } else {
+          showToast(data.message || 'Login failed', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+
+    async function handleSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm-password').value;
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await response.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          showSection('login-section');
+          document.getElementById('signup-form').reset();
+        } else {
+          showToast(data.message || 'Signup failed', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+
+    async function handleForgotPassword(event) {
+      event.preventDefault();
+      const email = document.getElementById('forgot-email').value;
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/forgot-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await response.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          showSection('otp-verification-section');
+          document.getElementById('forgot-password-form').reset();
+        } else {
+          showToast(data.message || 'Failed to send OTP', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+
+    async function handleOtpVerification(event) {
+      event.preventDefault();
+      const email = document.getElementById('forgot-email').value;
+      const otp = document.getElementById('otp-code').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmNewPassword = document.getElementById('confirm-new-password').value;
+      if (newPassword !== confirmNewPassword) {
+        showToast('Passwords do not match', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp, newPassword })
+        });
+        const data = await response.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          showSection('login-section');
+          document.getElementById('otp-verification-form').reset();
+        } else {
+          showToast(data.message || 'Invalid OTP or failed to reset password', 'error');
+        }
+      } catch (error) {
+        showToast('Error connecting to server', 'error');
+      }
+    }
+  </script>
+</body>
+</html>
